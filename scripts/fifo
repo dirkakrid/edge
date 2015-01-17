@@ -1,0 +1,56 @@
+#!/bin/sh
+
+EDGE_ROOT=${EDGE_ROOT:-"$(dirname $0)"}
+CURRENT="$EDGE_ROOT/.fifo.current"
+STASHED="$EDGE_ROOT/.fifo.stashed"
+DONE="$EDGE_ROOT/.fifo.done"
+E="$(echo -e "\E")"
+
+if [ -n "$1" ]; then
+    action="$1"
+    shift
+else
+    action="list"
+fi
+
+get_number () {
+    if [ -z "$1" ]; then
+        echo 'delete what?' 1>&2
+        return 1
+    fi
+    if [ "$2" == "--check" ]; then
+        if [ "$1" -lt "0" -o "$1" -ge "$(wc -l "$CURRENT" | cut -d\  -f1)" ]; then
+            echo 'number out of range!' 1>&2
+            return 1
+        fi
+    fi
+    echo -n "$1"
+    return 0
+}
+
+case "$action" in
+    l*) # list
+        head -n "${1:-10}" "$CURRENT" | \
+            nl -ba -v0 -w1 -s"│ $E[1;0m" | \
+            sed -r 's/^(.*)$/'$E'[0;38;5;208m\1'$E'[0m/;'
+        ;;
+    a*) # add
+        echo "$@" >> "$CURRENT"
+        ;;
+    r*) # remove
+        n="$(get_number "$1" --check)" || exit
+        sed -i "$((n + 1)) d" "$CURRENT"
+        ;;
+    d*) # done
+        n="$(get_number "$1" --check)" || exit
+        head -n "$((n + 1))" "$CURRENT" | tail -n 1 >> "$DONE" && \
+            sed -i "$((n + 1)) d" "$CURRENT"
+        ;;
+    s*) # stash
+        n="$(get_number "$1" --check)" || exit
+        head -n "$((n + 1))" "$CURRENT" | tail -n 1 >> "$STASHED" && \
+            sed -i "$((n + 1)) d" "$CURRENT"
+        ;;
+    *)
+        echo "unknown command: $action";;
+esac
