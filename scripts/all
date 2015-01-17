@@ -13,5 +13,5 @@ for file in $(ls "$EDGE_ROOT"); do
     else
         printf "\E[7m------%s------\E[0m\n" "$file"
     fi
-    cat "$EDGE_ROOT/$file" | hl
+    cat "$EDGE_ROOT/$file" | edge-prettify
 done | less -rA

@@ -12,7 +12,7 @@ function e {
 		if head -n 1 "$path" | grep -q "^#!"; then
 			"$path" "$@"
 		else
-			cat "$path" | hl | less -r -FX
+			cat "$path" | edge-prettify | less -r -FX
 		fi
 	else
 		echo -e '\E[0;31mnaw!\E[0m'
