@@ -1,6 +1,6 @@
 # These are bash functions to be sourced in ~/.bashrc
 
-EDGE_ROOT=${EDGE_ROOT:-~/edge}
+export EDGE_ROOT=${EDGE_ROOT:-~/edge}
 
 function e {
 	action="${1:-default}"
