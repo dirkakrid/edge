@@ -1,0 +1,17 @@
+#!/bin/sh
+
+EDGE_ROOT=${EDGE_ROOT:-"$(dirname $0)"}
+
+if [ -z "$EDGE_ROOT" ]; then
+	echo 'Error: $EDGE_ROOT not set'
+	exit 1
+fi
+
+for file in $(ls "$EDGE_ROOT"); do
+    if [ -x "$EDGE_ROOT/$file" ]; then
+        printf "\E[7;31m------%s------\E[0m\n" "$file"
+    else
+        printf "\E[7m------%s------\E[0m\n" "$file"
+    fi
+    cat "$EDGE_ROOT/$file" | hl
+done | less -rA
