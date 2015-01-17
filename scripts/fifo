@@ -51,6 +51,13 @@ case "$action" in
         head -n "$((n + 1))" "$CURRENT" | tail -n 1 >> "$STASHED" && \
             sed -i "$((n + 1)) d" "$CURRENT"
         ;;
-    *)
-        echo "unknown command: $action";;
+    *) # help
+        echo 'usage: ./fifo [command] [options]'
+        echo 'commands: (may be abbreviated to the first letter)'
+        echo '   list [count] - List <count> notes'
+        echo '   add <text> - add a note containing <text>'
+        echo '   remove <n> - remove note number <n>'
+        echo '   done <n> - move note number <n> to .fifo.done'
+        echo '   stash <n> - move note number <n> to .fifo.stashed'
+        ;;
 esac
