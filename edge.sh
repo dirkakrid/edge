@@ -2,7 +2,7 @@
 
 export EDGE_ROOT=${EDGE_ROOT:-~/edge}
 
-function e {
+function edge {
 	action="${1:-default}"
 	shift
 	path="$EDGE_ROOT"/"$action"
@@ -24,4 +24,4 @@ _TabComplete_Edge () {
 	COMPREPLY=( $(compgen -W "$(ls "$EDGE_ROOT")" -- "$cur") )
 }
 
-complete -F _TabComplete_Edge -o filenames e
+complete -F _TabComplete_Edge -o filenames edge
