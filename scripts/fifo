@@ -32,7 +32,7 @@ case "$action" in
     l*) # list
         head -n "${1:-10}" "$CURRENT" | \
             nl -ba -v0 -w1 -s"│ $E[1;0m" | \
-            sed -r 's/^(.*)$/'$E'[0;38;5;208m\1'$E'[0m/;'
+            sed -r 's/^(.*)$/'$E'[1;38;5;208m\1'$E'[0m/;'
         ;;
     a*) # add
         echo "$@" >> "$CURRENT"
